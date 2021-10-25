@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController     //esta vai ser uma aplicação REST - API web
 public class VendasApplication {
 
-    @Value("${application.name}")
+    @Value("${application.name}") //recebe do .properties apropriado
     private String applicationName;
 
     @GetMapping("/hello")   //mapear URL /hello no servidor que rodamos à mensagem
