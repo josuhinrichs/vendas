@@ -1,2 +1,2 @@
-# vendas
- Uma aplicação em Spring Bootm para aprendizado da ferramenta.
+# Vendas
+ Uma aplicação em Spring Boot para aprendizado da ferramenta.
