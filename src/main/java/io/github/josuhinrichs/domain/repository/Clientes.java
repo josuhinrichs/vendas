@@ -1,4 +1,4 @@
-package io.github.josuhinrichs.domain.repositorio;
+package io.github.josuhinrichs.domain.repository;
 
 
 import io.github.josuhinrichs.domain.entity.Cliente;
