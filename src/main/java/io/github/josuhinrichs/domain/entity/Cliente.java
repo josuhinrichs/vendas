@@ -15,7 +15,7 @@ public class Cliente {
     @Column(name = "nome", length = 100)
     private String nome;
 
-    @OneToMany( mappedBy = "cliente" )  //um cliente para vários pedidos; mapeamento para
+    @OneToMany( mappedBy = "cliente" , fetch = FetchType.LAZY)  //um cliente para vários pedidos; mapeamento para
     private Set<Pedido> pedidos;    //Set é recomendado nesse caso
 
     public Set<Pedido> getPedidos() {
