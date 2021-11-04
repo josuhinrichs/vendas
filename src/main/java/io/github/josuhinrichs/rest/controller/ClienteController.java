@@ -1,19 +1,33 @@
 package io.github.josuhinrichs.rest.controller;
 
+import io.github.josuhinrichs.domain.entity.Cliente;
+import io.github.josuhinrichs.domain.repository.Clientes;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.xml.ws.Response;
+import java.util.Optional;
 
 @Controller //gerenciado pelo container de injeção de dependências do spring
-@RequestMapping( "/api/clientes" )  //URL cujas requisições dizem respeito a este controller
 public class ClienteController {
 
-    @RequestMapping(value = "/hello/{nome}", method = RequestMethod.GET)
+    private Clientes clientes;
+
+    public ClienteController(Clientes clientes) {
+        this.clientes = clientes;
+    }
+
+    @GetMapping("/api/clientes/{id}") //equivalente ao request com GET
     @ResponseBody
-    public String helloCliente(@PathVariable("nome") String nomeCliente){   //vai receber variável no path
-        return String.format("Hello %s ", nomeCliente);
+    public ResponseEntity getClienteById( @PathVariable Integer id ){   //vai receber variável no path
+        Optional<Cliente> cliente = clientes.findById(id);
+
+        if(cliente.isPresent()){
+            return ResponseEntity.ok( cliente.get() );        //retorna cliente com status OK
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
 }
