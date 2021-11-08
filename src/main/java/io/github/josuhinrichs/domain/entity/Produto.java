@@ -19,7 +19,6 @@ public class Produto {
     private BigDecimal preco;
 
     public Integer getId() {
-
         return id;
     }
 
