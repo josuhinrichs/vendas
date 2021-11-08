@@ -1,8 +1,19 @@
 package io.github.josuhinrichs.domain.entity;
 
+import lombok.*;
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
+//@Data não é recomendado para JPA entities
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 @Table(name = "produto")
 public class Produto {
@@ -22,23 +33,16 @@ public class Produto {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Produto produto = (Produto) o;
+        return id != null && Objects.equals(id, produto.id);
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public BigDecimal getPreco() {
-        return preco;
-    }
-
-    public void setPreco(BigDecimal preco) {
-        this.preco = preco;
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

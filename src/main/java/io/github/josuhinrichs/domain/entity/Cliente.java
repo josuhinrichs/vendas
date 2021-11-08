@@ -1,10 +1,19 @@
 package io.github.josuhinrichs.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 @Table(name = "cliente")
 public class Cliente {
@@ -18,20 +27,9 @@ public class Cliente {
     private String nome;
 
     @JsonIgnore
-    @OneToMany( mappedBy = "cliente" , fetch = FetchType.LAZY)  //um cliente para vários pedidos; mapeamento para
+    @OneToMany( mappedBy = "cliente" , fetch = FetchType.LAZY)
+    @ToString.Exclude  //um cliente para vários pedidos; mapeamento para
     private Set<Pedido> pedidos;    //Set é recomendado nesse caso
-
-    public Set<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(Set<Pedido> pedidos) {
-        this.pedidos = pedidos;
-    }
-
-    public Cliente(){
-
-    }
 
     public Cliente(String nome){
         this.nome = nome;
@@ -42,27 +40,16 @@ public class Cliente {
         this.id = id;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Cliente cliente = (Cliente) o;
+        return id != null && Objects.equals(id, cliente.id);
     }
 
     @Override
-    public String toString() {
-        return "Cliente{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                '}';
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
