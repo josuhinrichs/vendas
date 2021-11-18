@@ -10,10 +10,7 @@ import java.util.Objects;
 //@Data não é recomendado para JPA entities
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 @Entity
 @Table(name = "produto")
 public class Produto {

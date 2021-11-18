@@ -8,12 +8,9 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "cliente")
 public class Cliente {

@@ -18,29 +18,30 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
 
     private final Pedidos repository;
     private final Clientes clientesRepository;
-    private final ItensPedido itensPedidoRepository;
     private final Produtos produtosRepository;
+    private final ItensPedido itensPedidoRepository;
 
     @Override
     @Transactional
-    public Pedido salvar(PedidoDTO dto) {
+    public Pedido salvar( PedidoDTO dto ) {
         Integer idCliente = dto.getCliente();
         Cliente cliente = clientesRepository
                 .findById(idCliente)
-                .orElseThrow( () -> new RegraNegocioException("Código de cliente inválido.") );
+                .orElseThrow(() -> new RegraNegocioException("Código de cliente inválido."));
 
         Pedido pedido = new Pedido();
         pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
-        pedido.setCliente( cliente );
+        pedido.setCliente(cliente);
 
         List<ItemPedido> itensPedido = converterItens(pedido, dto.getItens());
         repository.save(pedido);
@@ -49,8 +50,13 @@ public class PedidoServiceImpl implements PedidoService {
         return pedido;
     }
 
+    @Override
+    public Optional<Pedido> obterPedidoCompleto(Integer id) {
+        return repository.findByIdFetchItens(id);
+    }
+
     private List<ItemPedido> converterItens(Pedido pedido, List<ItemPedidoDTO> itens){
-        if (itens.isEmpty()){
+        if(itens.isEmpty()){
             throw new RegraNegocioException("Não é possível realizar um pedido sem itens.");
         }
 
@@ -60,15 +66,17 @@ public class PedidoServiceImpl implements PedidoService {
                     Integer idProduto = dto.getProduto();
                     Produto produto = produtosRepository
                             .findById(idProduto)
-                            .orElseThrow(() -> new RegraNegocioException("Código de produto inválido: " + idProduto));
+                            .orElseThrow(
+                                    () -> new RegraNegocioException(
+                                            "Código de produto inválido: "+ idProduto
+                                    ));
 
                     ItemPedido itemPedido = new ItemPedido();
                     itemPedido.setQuantidade(dto.getQuantidade());
                     itemPedido.setPedido(pedido);
                     itemPedido.setProduto(produto);
-
                     return itemPedido;
-
                 }).collect(Collectors.toList());
+
     }
 }
