@@ -1,5 +1,6 @@
 package io.github.josuhinrichs.domain.entity;
 
+import io.github.josuhinrichs.domain.enums.StatusPedido;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -30,6 +31,10 @@ public class Pedido {
 
     @Column( name = "total", precision = 20, scale = 2 )
     private BigDecimal total;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private StatusPedido status;
 
     @OneToMany(mappedBy = "pedido")
     @ToString.Exclude
